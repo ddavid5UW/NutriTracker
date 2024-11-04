@@ -9,10 +9,10 @@ import {
 } from "react-native";
 import { gql, useQuery } from "@apollo/client";
 import dayjs from "dayjs";
-import FoodListItem from "../components/FoodListItem";
 import FoodLogListItem from "../components/FoodLogListItem";
 
-const query = gql`
+// Query to fetch food logs for a specific date
+const foodLogsQuery = gql`
   query foodLogsForDate($date: Date!, $user_id: String!) {
     foodLogsForDate(date: $date, user_id: $user_id) {
       food_id
@@ -25,28 +25,48 @@ const query = gql`
   }
 `;
 
+// Query to fetch total calories for a specific date
+const kcalTotalQuery = gql`
+  query KcalTotalForDate($date: Date!, $user_id: String!) {
+    KcalTotalForDate(date: $date, user_id: $user_id) {
+      total_kcal
+    }
+  }
+`;
+
 export default function HomeScreen() {
   const user_id = "Eric zhang";
-  const { data, loading, error } = useQuery(query, {
-    variables: {
-      date: dayjs().format("YYYY-MM-DD"),
-      user_id,
-    },
+  const date = dayjs().format("YYYY-MM-DD");
+
+  // Fetch food logs
+  const { data, loading, error } = useQuery(foodLogsQuery, {
+    variables: { date, user_id },
   });
 
-  if (loading) {
+  // Fetch total calories for the day
+  const {
+    data: kcalData,
+    loading: kcalLoading,
+    error: kcalError,
+  } = useQuery(kcalTotalQuery, {
+    variables: { date, user_id },
+  });
+
+  if (loading || kcalLoading) {
     return <ActivityIndicator />;
   }
 
-  if (error) {
+  if (error || kcalError) {
     return <Text>Failed to fetch data</Text>;
   }
-  console.log(data)
+
+  const totalCalories = kcalData?.KcalTotalForDate?.total_kcal || 0;
+
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>
-        <Text style={styles.subtitle}>Calories</Text>
-        <Text>1770 - 360 = 1692</Text>
+        <Text style={styles.subtitle}>Total Calories</Text>
+        <Text style={{fontSize: 18}}>{`${totalCalories}`}</Text>
       </View>
       <View style={styles.headerRow}>
         <Text style={styles.subtitle}>Today's Log</Text>
@@ -58,7 +78,7 @@ export default function HomeScreen() {
         data={data.foodLogsForDate}
         contentContainerStyle={{ gap: 5 }}
         renderItem={({ item }) => <FoodLogListItem item={item} />}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
       />
     </View>
   );

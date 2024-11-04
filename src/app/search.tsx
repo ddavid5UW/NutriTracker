@@ -5,6 +5,7 @@ import {
   Button,
   StyleSheet,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
 import { Link } from "expo-router";
@@ -15,10 +16,17 @@ import {
   TextInput,
 } from "react-native-gesture-handler";
 import { gql, useLazyQuery } from "@apollo/client";
+import { Ionicons } from "@expo/vector-icons";
+import {
+  CameraView,
+  CameraType,
+  useCameraPermissions,
+  Camera,
+} from "expo-camera";
 
 const query = gql`
-  query search($ingr: String) {
-    search(ingr: $ingr) {
+  query search($ingr: String, $upc: String) {
+    search(ingr: $ingr, upc: $upc) {
       text
       hints {
         food {
@@ -36,8 +44,13 @@ const query = gql`
 
 export default function SearchScreen() {
   const [search, setSearch] = useState("");
-
+  const [scannerEnabled, setScannerEnabled] = useState(false);
   const [runSearch, { data, loading, error }] = useLazyQuery(query);
+  const [permission, requestPermission] = useCameraPermissions();
+  const [facing, setFacing] = useState<CameraType>("back");
+  
+
+  requestPermission();
 
   const performSearch = () => {
     runSearch({ variables: { ingr: search } });
@@ -50,6 +63,60 @@ export default function SearchScreen() {
 
   if (error) {
     return <Text>Failed to search</Text>;
+  
+  }
+
+  if (!permission) {
+    // Camera permissions are still loading.
+    return <View />;
+  }
+
+  if (!permission.granted) {
+    // Camera permissions are not granted yet.
+    return (
+      <View style={styles.container}>
+        <Text style={styles.message}>
+          We need your permission to show the camera
+        </Text>
+        <Button onPress={requestPermission} title="grant permission" />
+      </View>
+    );
+  }
+
+  function toggleCameraFacing() {
+    setFacing((current) => (current === "back" ? "front" : "back"));
+  }
+
+  if (scannerEnabled) {
+    return (
+      <View style={styles.container}>
+        <CameraView
+          style={styles.camera}
+          facing={facing}
+          onBarcodeScanned={(data) => {
+            runSearch({ variables: { upc: data.data } });
+            setScannerEnabled(false);
+          }}
+        >
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={toggleCameraFacing}
+            >
+              <Text style={styles.text}>Flip Camera</Text>
+            </TouchableOpacity>
+          </View>
+
+          <Ionicons
+          onPress={() => setScannerEnabled(false)}
+          name="close"
+          size={40}
+          color="dimgray"
+          style={{ position: 'absolute', right: 10, top: 10 }}
+        />
+        </CameraView>
+      </View>
+    );
   }
 
   const items = data?.search?.hints || [];
@@ -57,13 +124,21 @@ export default function SearchScreen() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <TextInput
-          style={styles.input}
-          value={search}
-          onChangeText={(text) => setSearch(text)}
-          placeholder="Search foods"
-        />
-        <Button title="Search" onPress={performSearch} />
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+          <TextInput
+            value={search}
+            onChangeText={setSearch}
+            placeholder="Search..."
+            style={styles.input}
+          />
+          <Ionicons
+            onPress={() => setScannerEnabled(true)}
+            name="barcode-outline"
+            size={32}
+            color="dimgray"
+          />
+        </View>
+        {search && <Button title="Search" onPress={performSearch} />}
         {loading && <ActivityIndicator />}
         <FlatList
           data={items}
@@ -79,25 +154,38 @@ export default function SearchScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
     flex: 1,
+    backgroundColor: "#fff",
     padding: 10,
     gap: 10,
-  },
-  headerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  subtitle: {
-    fontSize: 18,
-    fontWeight: "500",
-    flex: 1,
-    color: "dimgray",
   },
   input: {
     backgroundColor: "dimgray",
     padding: 10,
     borderRadius: 20,
+    flex: 1,
+  },
+  camera: {
+    flex: 1,
+  },
+  buttonContainer: {
+    flex: 1,
+    flexDirection: "row",
+    backgroundColor: "transparent",
+    margin: 64,
+  },
+  button: {
+    flex: 1,
+    alignSelf: "flex-end",
+    alignItems: "center",
+  },
+  text: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "white",
+  },
+  message: {
+    textAlign: "center",
+    paddingBottom: 10,
   },
 });
