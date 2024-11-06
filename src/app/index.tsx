@@ -12,6 +12,8 @@ import { gql, useQuery } from "@apollo/client";
 import dayjs from "dayjs";
 import FoodLogListItem from "../components/FoodLogListItem";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
+import Stack from '@mui/material/Stack';
 
 // Query to fetch food logs for a specific date
 const foodLogsQuery = gql`
@@ -112,12 +114,25 @@ export default function HomeScreen() {
 
   const foodLogs = foodData?.foodLogsForDate || [];
   const totalCalories = kcalData?.KcalTotalForDate?.total_kcal || 0;
+  //dummy value to change
+  const goal = 200
+  const calDisp = totalCalories
 
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>
         <Text style={styles.subtitle}>Total Calories</Text>
         <Text style={{ fontSize: 18 }}>{`${totalCalories}`}</Text>
+      </View>
+      <View>
+        <center>
+        <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 1, md: 2 }}>
+          <Gauge width={150} height={150} value={calDisp} valueMax={goal}
+            text={
+              `Calories \n ${totalCalories}`
+           } />
+        </Stack>
+        </center>
       </View>
       <View style={styles.headerRow}>
         <Text style={styles.subtitle}>Today's Log</Text>
