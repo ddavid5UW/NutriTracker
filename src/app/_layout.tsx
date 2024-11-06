@@ -1,4 +1,15 @@
-import { Stack } from "expo-router";
+import { Stack, Link } from "expo-router";
+import React, { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+//import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import HomeScreen from '.';
+import LoginScreen from './login';
+import SearchScreen from './search';
+
+//const Stack = createStackNavigator();
+
 import {
   ApolloClient,
   InMemoryCache,
@@ -16,11 +27,28 @@ const client = new ApolloClient({
 });
 
 const RootLayout = () => {
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const setloggedin = async() => {
+    const loggedin = await AsyncStorage.getItem('status');
+    const loggedinp = loggedin ? JSON.parse(loggedin) : {};
+    if(loggedinp == true){
+      await AsyncStorage.setItem('status', JSON.stringify(false));
+    }
+  }
+
   return (
     <ApolloProvider client={client}>
-      <Stack />
+        <Stack>
+          <Stack.Screen name="login" options={{title: 'Login'}}/>
+          <Stack.Screen name="index" options={{ title: 'Home' }} />
+          <Stack.Screen name="search" options={{ title: 'About' }} />
+          <Stack.Screen name="logout" options={{title: 'Logging out!'}}/>
+        </Stack>
+
+        
     </ApolloProvider>
   );
 };
+
 
 export default RootLayout;
