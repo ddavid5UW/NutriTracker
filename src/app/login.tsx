@@ -12,8 +12,10 @@ const LoginScreen: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [isLoginMode, setIsLoginMode] = useState<boolean>(true);
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const router = useRouter();
 
 // Modified code from my CS 571 p9 from a few semesters ago
+
   const handleSignUp = async () => {
     if (username && password) {
       try {
@@ -44,7 +46,6 @@ const LoginScreen: React.FC = () => {
         const userData = await AsyncStorage.getItem('status');
         if (userData !== null) {
           setLoggedIn(JSON.parse(userData) == true);
-          Alert.alert("status", loggedIn.toString())
         }
       } catch (error) {
         console.log(error); 
@@ -63,9 +64,7 @@ const LoginScreen: React.FC = () => {
 
         if (usersData[username] && usersData[username] === password) {
           await AsyncStorage.setItem('status', JSON.stringify(true));
-          const val = await AsyncStorage.getItem('status')
           setLoggedIn(true)
-          Alert.alert("status", val?.toString())
           
         } else {
           Alert.alert('Login Failed', 'Invalid username or password.');
@@ -84,6 +83,11 @@ const LoginScreen: React.FC = () => {
     setPassword('');
   };
   
+  useEffect(() => {
+    if (loggedIn) {
+      router.replace('/'); // Navigate to index screen when logged in
+    }
+  }, [loggedIn]);
 
 
   return (
@@ -113,7 +117,7 @@ const LoginScreen: React.FC = () => {
         onPress={toggleMode}
         color="#888"
       />
-    </View>: <View><Link href={"/home"} asChild>
+    </View>: <View><Link href={"/"} asChild>
     <Button title="Continue" />
   </Link></View>
   ) ;

@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import React, {  createContext, useState, useEffect } from 'react';
 import {
   View,
@@ -42,6 +42,7 @@ const kcalTotalQuery = gql`
 export default function HomeScreen() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   const user_id = "Eric zhang";
   const date = dayjs().format("YYYY-MM-DD");
@@ -73,6 +74,11 @@ export default function HomeScreen() {
     checkLoginStatus();
   }, []);
 
+  const handleLogin = async () => {
+    router.replace('/login');
+  };
+ 
+
   const handleLogout = async () => {
     try {
       await AsyncStorage.setItem('status', JSON.stringify(false));
@@ -91,9 +97,7 @@ export default function HomeScreen() {
     return (
       <View>
         <Text>Looks like you're not signed in</Text>
-        <Link href={"/login"} asChild>
-          <Button title="Get Started" />
-        </Link>
+          <Button title="Get Started" onPress={handleLogin}/>
       </View>
     );
   }
