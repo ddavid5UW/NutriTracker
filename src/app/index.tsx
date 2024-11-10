@@ -124,6 +124,9 @@ export default function HomeScreen() {
         <Link href={"/search"} asChild>
           <Button title="ADD FOOD" />
         </Link>
+        <Link href={"/weight"} asChild>
+          <Button title="WEIGHT" />
+        </Link>
         <Button title="Logout" onPress={handleLogout} />
       </View>
       <FlatList
