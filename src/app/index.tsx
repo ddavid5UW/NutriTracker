@@ -73,6 +73,9 @@ export default function HomeScreen() {
         <Link href={"/search"} asChild>
           <Button title="ADD FOOD" />
         </Link>
+        <Link href={"/foodLog"} asChild>
+          <Button title="View Logs" />
+        </Link>
       </View>
       <FlatList
         data={data.foodLogsForDate}
