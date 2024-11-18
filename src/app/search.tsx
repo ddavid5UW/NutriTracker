@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import FoodListItem from "../components/FoodListItem";
@@ -15,7 +15,7 @@ import {
   GestureHandlerRootView,
   TextInput,
 } from "react-native-gesture-handler";
-import { gql, useLazyQuery } from "@apollo/client";
+import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { Ionicons } from "@expo/vector-icons";
 import {
   CameraView,
@@ -48,14 +48,18 @@ export default function SearchScreen() {
   const [runSearch, { data, loading, error }] = useLazyQuery(query);
   const [permission, requestPermission] = useCameraPermissions();
   const [facing, setFacing] = useState<CameraType>("back");
-  
 
   requestPermission();
 
   const performSearch = () => {
     runSearch({ variables: { ingr: search } });
-    // setSearch("");
   };
+
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+    }
+  }, [data]);
 
   // if (loading) {
   //   return <ActivityIndicator />;
@@ -63,7 +67,6 @@ export default function SearchScreen() {
 
   if (error) {
     return <Text>Failed to search</Text>;
-  
   }
 
   if (!permission) {
@@ -108,12 +111,12 @@ export default function SearchScreen() {
           </View>
 
           <Ionicons
-          onPress={() => setScannerEnabled(false)}
-          name="close"
-          size={40}
-          color="dimgray"
-          style={{ position: 'absolute', right: 10, top: 10 }}
-        />
+            onPress={() => setScannerEnabled(false)}
+            name="close"
+            size={40}
+            color="dimgray"
+            style={{ position: "absolute", right: 10, top: 10 }}
+          />
         </CameraView>
       </View>
     );
@@ -143,7 +146,7 @@ export default function SearchScreen() {
         <FlatList
           data={items}
           renderItem={({ item }) => <FoodListItem item={item} />}
-          keyExtractor={(item) => item.label}
+          keyExtractor={(item, index) => `${item.label}-${index}`}
           ListEmptyComponent={() => <Text>Search a food</Text>}
           contentContainerStyle={{ gap: 5 }}
         />
