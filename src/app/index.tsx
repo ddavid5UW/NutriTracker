@@ -129,18 +129,12 @@ export default function HomeScreen() {
         </Link>
         <Button title="Logout" onPress={handleLogout} />
       </View>
-      {/* <FlatList
+      <FlatList
         data={foodLogs}
         contentContainerStyle={{ gap: 5 }}
         renderItem={({ item }) => <FoodLogListItem item={item} />}
-        keyExtractor={(item) => `${item.id}-${item.created_at}`}
-      /> */}
-      <FlatList
-  data={foodLogs}
-  contentContainerStyle={{ gap: 5 }}
-  renderItem={({ item }) => <FoodLogListItem item={item} />}
-  keyExtractor={(item, index) => `${item.id}-${item.created_at}-${index}`}
-/>
+        keyExtractor={(item) => item.id.toString()}
+      />
     </View>
   );
 }

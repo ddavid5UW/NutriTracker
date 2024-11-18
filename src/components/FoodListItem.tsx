@@ -33,8 +33,6 @@ const FoodListItem = ({ item }) => {
   const router = useRouter();
 
   const onPlusPressed = async () => {
-    // console.log("Can go back" +router.canGoBack())
-    router.back();
     await logFood({
       variables: {
         food_id: item.food.foodId,
@@ -43,13 +41,7 @@ const FoodListItem = ({ item }) => {
         user_id: "Eric zhang",
       },
     });
-    // router.back();
-    
-    // if (router.canGoBack()) {
-    //   router.back();
-    // } else {
-    //   router.push("/"); // Redirect to a default screen, e.g., HomeScreen
-    // }
+    router.back();
   };
 
   return (
