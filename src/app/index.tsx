@@ -1,12 +1,13 @@
 import { Link, useRouter } from "expo-router";
-import React, {  createContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   FlatList,
   Button,
   StyleSheet,
-  ActivityIndicator, Alert,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 import { gql, useQuery } from "@apollo/client";
 import dayjs from "dayjs";
@@ -29,18 +30,6 @@ const foodLogsQuery = gql`
   }
 `;
 
-// Query to fetch total calories for a specific date
-const kcalTotalQuery = gql`
-  query KcalTotalForDate($date: Date!, $user_id: String!) {
-    KcalTotalForDate(date: $date, user_id: $user_id) {
-      total_kcal
-    }
-  }
-`;
-
-
-
-
 export default function HomeScreen() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
@@ -55,17 +44,11 @@ export default function HomeScreen() {
     skip: !loggedIn,
   });
 
-  // Fetch total calories query, skipped until user is logged in
-  const { data: kcalData, loading: kcalLoading, error: kcalError } = useQuery(kcalTotalQuery, {
-    variables: { date, user_id },
-    skip: !loggedIn,
-  });
-
   // Check login status on component mount
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
-        const userData = await AsyncStorage.getItem('status');
+        const userData = await AsyncStorage.getItem("status");
         const isLoggedIn = userData ? JSON.parse(userData) === true : false;
         setLoggedIn(isLoggedIn);
         setLoading(false); // Stop loading after login status is checked
@@ -77,17 +60,16 @@ export default function HomeScreen() {
   }, []);
 
   const handleLogin = async () => {
-    router.replace('/login');
+    router.replace("/login");
   };
- 
 
   const handleLogout = async () => {
     try {
-      await AsyncStorage.setItem('status', JSON.stringify(false));
+      await AsyncStorage.setItem("status", JSON.stringify(false));
       setLoggedIn(false);
       Alert.alert("Logged Out", "You have been logged out.");
     } catch (error) {
-      console.error('Error setting logout status', error);
+      console.error("Error setting logout status", error);
     }
   };
 
@@ -99,21 +81,21 @@ export default function HomeScreen() {
     return (
       <View>
         <Text>Looks like you're not signed in</Text>
-          <Button title="Get Started" onPress={handleLogin}/>
+        <Button title="Get Started" onPress={handleLogin} />
       </View>
     );
   }
 
-  if (foodLoading || kcalLoading) {
+  if (foodLoading) {
     return <ActivityIndicator />;
   }
 
-  if (foodError || kcalError) {
+  if (foodError) {
     return <Text>Failed to fetch data</Text>;
   }
 
   const foodLogs = foodData?.foodLogsForDate || [];
-  const totalCalories = kcalData?.KcalTotalForDate?.total_kcal || 0;
+  const totalCalories = foodLogs.reduce((sum, log) => sum + (log.kcal || 0), 0);
   //dummy value to change
   const goal = 200
   const calDisp = totalCalories
@@ -122,7 +104,7 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <View style={styles.headerRow}>
         <Text style={styles.subtitle}>Total Calories</Text>
-        <Text style={{ fontSize: 18 }}>{`${totalCalories}`}</Text>
+        <Text style={{ fontSize: 18 }}>{`${totalCalories} kcal`}</Text>
       </View>
       <View>
         <center>
@@ -139,7 +121,13 @@ export default function HomeScreen() {
         <Link href={"/search"} asChild>
           <Button title="ADD FOOD" />
         </Link>
+        <Link href={"/weight"} asChild>
+          <Button title="WEIGHT" />
+        </Link>
         <Button title="Logout" onPress={handleLogout} />
+        <Link href={"/foodLog"} asChild>
+          <Button title="View Logs" />
+        </Link>
       </View>
       <FlatList
         data={foodLogs}
@@ -170,4 +158,3 @@ const styles = StyleSheet.create({
     color: "dimgray",
   },
 });
-

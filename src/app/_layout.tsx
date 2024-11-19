@@ -7,6 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from '.';
 import LoginScreen from './login';
 import SearchScreen from './search';
+import WeightScreen from './weight';
 
 //const Stack = createStackNavigator();
 
@@ -43,6 +44,7 @@ const RootLayout = () => {
           <Stack.Screen name="index" options={{ title: 'Home' }} />
           <Stack.Screen name="search" options={{ title: 'About' }} />
           <Stack.Screen name="logout" options={{title: 'Logging out!'}}/>
+          <Stack.Screen name="weight" options={{ title: 'Weight Tracker' }} />
         </Stack>
 
         
