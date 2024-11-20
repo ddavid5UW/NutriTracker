@@ -33,6 +33,7 @@ const foodLogsQuery = gql`
 export default function HomeScreen() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
+  const [username, setUsername] = useState<string | null>(null); // State for username
   const router = useRouter();
 
   const user_id = "Eric zhang";
@@ -50,6 +51,10 @@ export default function HomeScreen() {
       try {
         const userData = await AsyncStorage.getItem("status");
         const isLoggedIn = userData ? JSON.parse(userData) === true : false;
+        const name = await AsyncStorage.getItem("username")
+        if(name != null){
+          setUsername(JSON.parse(name))
+        }
         setLoggedIn(isLoggedIn);
         setLoading(false); // Stop loading after login status is checked
       } catch (error) {
@@ -95,13 +100,14 @@ export default function HomeScreen() {
   }
 
   const foodLogs = foodData?.foodLogsForDate || [];
-  const totalCalories = foodLogs.reduce((sum, log) => sum + (log.kcal || 0), 0);
+  const totalCalories = foodLogs.reduce((sum:number, log) => sum + (log.kcal || 0), 0);
   //dummy value to change
-  const goal = 200
+  const goal = 500
   const calDisp = totalCalories
 
   return (
     <View style={styles.container}>
+      <Text style={styles.welcomeText}>{`Welcome, ${username}`}</Text>
       <View style={styles.headerRow}>
         <Text style={styles.subtitle}>Total Calories</Text>
         <Text style={{ fontSize: 18 }}>{`${totalCalories} kcal`}</Text>
@@ -127,6 +133,9 @@ export default function HomeScreen() {
         <Button title="Logout" onPress={handleLogout} />
         <Link href={"/foodLog"} asChild>
           <Button title="View Logs" />
+        </Link>
+        <Link href={"/settings"} asChild>
+           <Button title="Settings" />
         </Link>
       </View>
       <FlatList
@@ -156,5 +165,11 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     flex: 1,
     color: "dimgray",
+  },
+  welcomeText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "black",
+    marginBottom: 10,
   },
 });
