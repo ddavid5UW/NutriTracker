@@ -24,7 +24,11 @@ const foodLogsQuery = gql`
       user_id
       created_at
       label
+      carb
       kcal
+      fat
+      fiber
+      protien
       id
     }
   }

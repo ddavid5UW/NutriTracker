@@ -8,7 +8,7 @@ const FoodLogListItem = ({ item }) => {
     <View style={styles.container}>
       <View style={{ flex: 1, gap: 5 }}>
         <Text style={{ fontWeight: "bold", fontSize: 16 }}>{item.label}</Text>
-        <Text style={{ color: "dimgray" }}>{item.kcal} cal</Text>
+        <Text style={{ color: "dimgray" }}>{item.carb}g carb, {item.kcal} cal, {item.fat}g fat, {item.fiber}g fiber, {item.protien}g protein</Text>
       </View>
     </View>
   );

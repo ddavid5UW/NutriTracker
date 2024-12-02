@@ -34,7 +34,11 @@ const query = gql`
           brand
           foodId
           nutrients {
+            CHOCDF
             ENERC_KCAL
+            FAT
+            FIBTG
+            PROCNT
           }
         }
       }
@@ -120,6 +124,7 @@ export default function SearchScreen() {
   }
 
   const items = data?.search?.hints || [];
+  // console.log(data);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
