@@ -9,6 +9,7 @@ type Food_log {
   protien: Int
   label: String
   user_id: String
+  image: String
 }
 
 type KcalTotalForDate {
@@ -101,6 +102,7 @@ type Mutation {
     fat: Int
     fiber: Int
     protien: Int
+    image: String
     user_id: String
   ): Food_log
     @dbquery(

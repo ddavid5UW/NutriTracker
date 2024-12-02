@@ -25,6 +25,7 @@ const foodLogsQuery = gql`
       fat
       fiber
       protien
+      image
       id
     }
   }
