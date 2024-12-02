@@ -27,6 +27,7 @@ const foodLogsQuery = gql`
       fat
       fiber
       protien
+      image
       id
     }
   }
@@ -121,7 +122,7 @@ export default function HomeScreen() {
       </View>
       <FlatList
         data={foodLogs}
-        contentContainerStyle={{ gap: 5 }}
+        contentContainerStyle={{ gap: 10, paddingRight: 10}}
         renderItem={({ item }) => <FoodLogListItem item={item} />}
         keyExtractor={(item) => item.id.toString()}
       />

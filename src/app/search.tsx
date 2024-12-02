@@ -33,6 +33,7 @@ const query = gql`
           label
           brand
           foodId
+          image
           nutrients {
             CHOCDF
             ENERC_KCAL
@@ -52,7 +53,6 @@ export default function SearchScreen() {
   const [runSearch, { data, loading, error }] = useLazyQuery(query);
   const [permission, requestPermission] = useCameraPermissions();
   const [facing, setFacing] = useState<CameraType>("back");
-  
 
   requestPermission();
 
@@ -67,7 +67,6 @@ export default function SearchScreen() {
 
   if (error) {
     return <Text>Failed to search</Text>;
-  
   }
 
   if (!permission) {
@@ -112,19 +111,19 @@ export default function SearchScreen() {
           </View>
 
           <Ionicons
-          onPress={() => setScannerEnabled(false)}
-          name="close"
-          size={40}
-          color="dimgray"
-          style={{ position: 'absolute', right: 10, top: 10 }}
-        />
+            onPress={() => setScannerEnabled(false)}
+            name="close"
+            size={40}
+            color="dimgray"
+            style={{ position: "absolute", right: 10, top: 10 }}
+          />
         </CameraView>
       </View>
     );
   }
 
   const items = data?.search?.hints || [];
-  // console.log(data);
+  console.log(data);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -146,11 +145,12 @@ export default function SearchScreen() {
         {search && <Button title="Search" onPress={performSearch} />}
         {loading && <ActivityIndicator />}
         <FlatList
+          style={{ paddingRight: 10 }}
           data={items}
           renderItem={({ item }) => <FoodListItem item={item} />}
           keyExtractor={(item) => item.label}
           ListEmptyComponent={() => <Text>Search a food</Text>}
-          contentContainerStyle={{ gap: 5 }}
+          contentContainerStyle={{ gap: 10 }}
         />
       </View>
     </GestureHandlerRootView>
