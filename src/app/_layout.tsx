@@ -39,15 +39,13 @@ const RootLayout = () => {
 
   return (
     <ApolloProvider client={client}>
-        <Stack>
-          <Stack.Screen name="login" options={{title: 'Login'}}/>
-          <Stack.Screen name="index" options={{ title: 'Home' }} />
-          <Stack.Screen name="search" options={{ title: 'About' }} />
-          <Stack.Screen name="logout" options={{title: 'Logging out!'}}/>
-          <Stack.Screen name="weight" options={{ title: 'Weight Tracker' }} />
-        </Stack>
-
-        
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="login" />
+        <Stack.Screen name="index" />
+        <Stack.Screen name="search" />
+        <Stack.Screen name="logout" />
+        <Stack.Screen name="weight" />
+      </Stack>
     </ApolloProvider>
   );
 };

@@ -6,11 +6,13 @@ import {
   Button,
   StyleSheet,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import { gql, useQuery } from "@apollo/client";
 import dayjs from "dayjs";
 import FoodLogListItem from "../components/FoodLogListItem";
 import { useState } from "react";
+import { AntDesign } from '@expo/vector-icons';
 
 // Query to fetch food logs for a specific date
 const foodLogsQuery = gql`
@@ -52,16 +54,33 @@ export default function HomeScreen() {
   const totalCalories = data?.foodLogsForDate?.reduce((sum: any, log: { kcal: any; }) => sum + log.kcal, 0) || 0;
 
   return (
+    // <View style={styles.container}>
+    //   <View style={styles.headerRow}>
+    //     <Button title="Previous" onPress={goToPreviousDay} />
+    //     <Text style={styles.dateText}>{dayjs(date).format("MMMM DD, YYYY")}</Text>
+    //     <Button
+    //       title="Next"
+    //       onPress={goToNextDay}
+    //       disabled={isToday}
+    //       color={isToday ? "gray" : "#007AFF"} // Change color when disabled
+    //     />
+    //   </View>
     <View style={styles.container}>
       <View style={styles.headerRow}>
-        <Button title="Previous" onPress={goToPreviousDay} />
+        <TouchableOpacity onPress={goToPreviousDay}>
+          <AntDesign name="left" size={24} color="black" />
+        </TouchableOpacity>
         <Text style={styles.dateText}>{dayjs(date).format("MMMM DD, YYYY")}</Text>
-        <Button
-          title="Next"
-          onPress={goToNextDay}
+        <TouchableOpacity 
+          onPress={goToNextDay} 
           disabled={isToday}
-          color={isToday ? "gray" : "#007AFF"} // Change color when disabled
-        />
+        >
+          <AntDesign 
+            name="right" 
+            size={24} 
+            color={isToday ? "gray" : "black"} 
+          />
+        </TouchableOpacity>
       </View>
 
       <Text style={styles.caloriesText}>Total Calories: {totalCalories} kcal</Text>
