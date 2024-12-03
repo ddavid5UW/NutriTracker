@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
-import { Stack, Link, useRouter } from "expo-router";
+import {useRouter } from "expo-router";
 import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
 
 const SettingsPage: React.FC = () => {
@@ -9,51 +9,67 @@ const SettingsPage: React.FC = () => {
   const [currentUsername, setCurrentUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [notifications, setNotifications] = useState<boolean>(true);
-  const [healthDetails, setHealthDetails] = useState<string>('');
+  const [goal, setGoal] = useState<string>('');
   const [unitMeasure, setUnitMeasure] = useState<string>('metric');
   const router = useRouter();
 
   useEffect(() => {
-    const loadUserData = async () => {
+    const updateStatus = async () => {
       try {
+        const name = await AsyncStorage.getItem("username")
+        const userGoal = await AsyncStorage.getItem("goal")
         const users = await AsyncStorage.getItem('users');
-        const username = await AsyncStorage.getItem('username')
-        const usersData = users ? JSON.parse(users) : {};
-        if(username != null){
-            const password = usersData[username];
+        const usersData = users ? JSON.parse(users) : {};      
+        if(userGoal != null){
+          setGoal(JSON.parse(userGoal))
         }
-        if (username && password) {
-          setPassword(password);
-          setUsername(username); // Set the current username
+        if(name != null){
+          const currName = JSON.parse(name) 
+          setUsername(JSON.parse(name))
+          if(usersData != null){
+            setPassword((usersData[currName]))
+          }
         }
       } catch (error) {
-        console.error('Error loading user data', error);
+        console.log(error);
       }
     };
-
-    loadUserData();
-  }, [username]);
-
+    updateStatus();
+  }, []);
   const handleSubmit = async () => {
-    if (username && password) {
+    if (username || password || goal) {
         try {
+            // Get users data from AsyncStorage
             const users = await AsyncStorage.getItem('users');
-            const usersData = users ? JSON.parse(users) : {};
-
-            if (usersData[username]) {
-                delete usersData[username];
-                await AsyncStorage.setItem('users', JSON.stringify(usersData)); 
+            const usersData = users ? JSON.parse(users) : {};  
+            const name = await AsyncStorage.getItem("username")
+            if(name != null){
+              const currUser = JSON.parse(name) 
+              if (usersData[currUser]) {
+                console.log(`Deleting user: ${currUser}`);  // Log the username being deleted
+                delete usersData[currUser];
+                console.log('usersData after deletion:', usersData);
+              }
             }
+            console.log('Current usersData:', usersData);  // Log current state of usersData
+            // Add new or update user password
             usersData[username] = password;
+            console.log('usersData after adding/updating:', usersData);
+            // Save updated usersData to AsyncStorage
             await AsyncStorage.setItem('users', JSON.stringify(usersData));
-            await AsyncStorage.setItem('username',JSON.stringify(username));
+            await AsyncStorage.setItem('username', JSON.stringify(username));
+            await AsyncStorage.setItem('goal', JSON.stringify(goal));
+            // Redirect to the home page
+            router.replace("/");
+
         } catch (error) {
-        console.error('Error saving user data', error);
-      }
+            console.error('Error saving user data', error);
+        }
     } else {
-      Alert.alert('Invalid Input', 'Please enter both a username and password.');
+        Alert.alert('Invalid Input', 'Please enter both a username and password.');
     }
-  };
+};
+
 
   return (
     <ScrollView style={styles.container}>
@@ -66,7 +82,7 @@ const SettingsPage: React.FC = () => {
         <TextInput
           style={styles.input}
           value={username}
-          placeholder={username}
+          placeholder={username || "Enter New Username"}
           onChangeText={setUsername}
         />
       </View>
@@ -76,8 +92,19 @@ const SettingsPage: React.FC = () => {
         <TextInput
           style={styles.input}
           value={password}
+          placeholder={password}
           onChangeText={setPassword}
           secureTextEntry
+        />
+      </View>
+
+      <View style={styles.formGroup}>
+        <Text>Set Goal:</Text>
+        <TextInput
+          style={styles.input}
+          value={goal}
+          placeholder={goal}
+          onChangeText={setGoal}
         />
       </View>
 
