@@ -28,6 +28,7 @@ const LoginScreen: React.FC = () => {
           usersData[username] = password;
           await AsyncStorage.setItem('users', JSON.stringify(usersData));
           await AsyncStorage.setItem('username',JSON.stringify(username));
+          await AsyncStorage.setItem('goal',JSON.stringify("1800"))
           Alert.alert('Sign Up Successful', 'You can now log in with your new account.');
           setIsLoginMode(true);
         }
