@@ -2,9 +2,14 @@ type Food_log {
   created_at: DateTime
   food_id: String
   id: Int!
+  carb: Int
   kcal: Int
+  fat: Int
+  fiber: Int
+  protien: Int
   label: String
   user_id: String
+  image: String
 }
 
 type KcalTotalForDate {
@@ -92,7 +97,12 @@ type Mutation {
   insertFood_log(
     label: String
     food_id: String
+    carb: Int
     kcal: Int
+    fat: Int
+    fiber: Int
+    protien: Int
+    image: String
     user_id: String
   ): Food_log
     @dbquery(
