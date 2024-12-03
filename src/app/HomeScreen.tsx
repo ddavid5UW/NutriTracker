@@ -101,12 +101,33 @@ export default function HomeScreen() {
   const foodLogs = foodData?.foodLogsForDate || [];
   // Calculate total calories dynamically
   const totalCalories = foodLogs.reduce((sum, log) => sum + (log.kcal || 0), 0);
+  const totalCarbs = foodLogs.reduce((sum, log) => sum + (log.carb || 0), 0);
+  const totalFat = foodLogs.reduce((sum, log) => sum + (log.fat || 0), 0);
+  const totalFiber = foodLogs.reduce((sum, log) => sum + (log.fiber || 0), 0);
+  const totalProtein = foodLogs.reduce((sum, log) => sum + (log.protien || 0), 0);
+
 
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>
         <Text style={styles.subtitle}>Total Calories</Text>
         <Text style={{ fontSize: 18 }}>{`${totalCalories} kcal`}</Text>
+      </View>
+      <View style={styles.headerRow}>
+        <Text style={styles.subtitle}>Total Carbs</Text>
+        <Text style={{ fontSize: 18 }}>{`${totalCarbs} carbs`}</Text>
+      </View>
+      <View style={styles.headerRow}>
+        <Text style={styles.subtitle}>Total Fat</Text>
+        <Text style={{ fontSize: 18 }}>{`${totalFat} Fat`}</Text>
+      </View>
+      <View style={styles.headerRow}>
+        <Text style={styles.subtitle}>Total Fiber</Text>
+        <Text style={{ fontSize: 18 }}>{`${totalFiber} fiber`}</Text>
+      </View>
+      <View style={styles.headerRow}>
+        <Text style={styles.subtitle}>Total Protein</Text>
+        <Text style={{ fontSize: 18 }}>{`${totalProtein} protein`}</Text>
       </View>
       <View style={styles.headerRow}>
         <Text style={styles.subtitle}>Today's Log</Text>
