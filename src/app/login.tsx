@@ -27,6 +27,8 @@ const LoginScreen: React.FC = () => {
         } else {
           usersData[username] = password;
           await AsyncStorage.setItem('users', JSON.stringify(usersData));
+          await AsyncStorage.setItem('username',JSON.stringify(username));
+          await AsyncStorage.setItem('goal',JSON.stringify("1800"))
           Alert.alert('Sign Up Successful', 'You can now log in with your new account.');
           setIsLoginMode(true);
         }
@@ -46,6 +48,7 @@ const LoginScreen: React.FC = () => {
         const userData = await AsyncStorage.getItem('status');
         if (userData !== null) {
           setLoggedIn(JSON.parse(userData) == true);
+          
         }
       } catch (error) {
         console.log(error); 
@@ -64,6 +67,7 @@ const LoginScreen: React.FC = () => {
 
         if (usersData[username] && usersData[username] === password) {
           await AsyncStorage.setItem('status', JSON.stringify(true));
+          await AsyncStorage.setItem('username',JSON.stringify(username));
           setLoggedIn(true)
           
         } else {
