@@ -48,19 +48,37 @@ const FoodListItem = ({ item }) => {
   const router = useRouter();
 
   const onPlusPressed = async () => {
-    await logFood({
-      variables: {
-        food_id: item.food.foodId,
-        carb: item.food.nutrients.CHOCDF,
-        kcal: item.food.nutrients.ENERC_KCAL,
-        fat: item.food.nutrients.FAT,
-        fiber: item.food.nutrients.FIBTG,
-        protien: item.food.nutrients.PROCNT,
-        image: item.food.image,
-        label: item.food.label,
-        user_id: "Eric zhang",
-      },
-    });
+    console.log(item.food.image)
+    if(item.food.image === null){
+      await logFood({
+        variables: {
+          food_id: item.food.foodId,
+          carb: item.food.nutrients.CHOCDF,
+          kcal: item.food.nutrients.ENERC_KCAL,
+          fat: item.food.nutrients.FAT,
+          fiber: item.food.nutrients.FIBTG,
+          protien: item.food.nutrients.PROCNT,
+          image: "",
+          label: item.food.label,
+          user_id: "Eric zhang",
+        },
+      });
+    }
+    else{
+      await logFood({
+        variables: {
+          food_id: item.food.foodId,
+          carb: item.food.nutrients.CHOCDF,
+          kcal: item.food.nutrients.ENERC_KCAL,
+          fat: item.food.nutrients.FAT,
+          fiber: item.food.nutrients.FIBTG,
+          protien: item.food.nutrients.PROCNT,
+          image: item.food.image,
+          label: item.food.label,
+          user_id: "Eric zhang",
+        },
+      });
+    }
     router.back();
   };
 

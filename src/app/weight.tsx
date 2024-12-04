@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, FlatList } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LineChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
+import dayjs from 'dayjs';
+import { AntDesign } from '@expo/vector-icons';
 
 interface WeightLog {
   id: string;
@@ -13,8 +15,8 @@ interface WeightLog {
 const WeightScreen = () => {
   const [weight, setWeight] = useState('');
   const [weightLogs, setWeightLogs] = useState<WeightLog[]>([]);
+  const [currentMonth, setCurrentMonth] = useState(dayjs());
 
-  // Load weight logs from AsyncStorage on component mount
   useEffect(() => {
     loadWeightLogs();
   }, []);
@@ -31,15 +33,16 @@ const WeightScreen = () => {
   };
 
   const handleAddWeight = async () => {
-    if (!weight) {
-      alert('Please enter a weight');
+    const weightValue = parseFloat(weight);
+    if (!weight || weightValue > 300) {
+      alert('Please enter a valid weight (up to 300 kg)');
       return;
     }
 
     try {
       const newLog: WeightLog = {
         id: Date.now().toString(),
-        weight: parseFloat(weight),
+        weight: weightValue,
         date: new Date().toISOString(),
       };
 
@@ -53,13 +56,19 @@ const WeightScreen = () => {
     }
   };
 
+  const filteredLogs = weightLogs.filter(log =>
+    dayjs(log.date).isSame(currentMonth, 'month')
+  );
+
   const chartData = {
-    labels: weightLogs
-      .slice(-7)
-      .map(log => new Date(log.date).toLocaleDateString()),
+    labels: filteredLogs.map(log => dayjs(log.date).format('DD')),
     datasets: [{
-      data: weightLogs.slice(-7).map(log => log.weight),
+      data: filteredLogs.map(log => log.weight),
     }],
+  };
+
+  const handleMonthChange = (direction: 'prev' | 'next') => {
+    setCurrentMonth(currentMonth.add(direction === 'next' ? 1 : -1, 'month'));
   };
 
   return (
@@ -75,7 +84,17 @@ const WeightScreen = () => {
         <Button title="Add Weight" onPress={handleAddWeight} />
       </View>
 
-      {weightLogs.length > 0 && (
+      <View style={styles.monthNavigation}>
+        <TouchableOpacity onPress={() => handleMonthChange('prev')}>
+          <AntDesign name="left" size={24} color="black" />
+        </TouchableOpacity>
+        <Text style={styles.monthLabel}>{currentMonth.format('MMMM YYYY')}</Text>
+        <TouchableOpacity onPress={() => handleMonthChange('next')}>
+          <AntDesign name="right" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
+
+      {filteredLogs.length > 0 ? (
         <View style={styles.chartContainer}>
           <Text style={styles.chartTitle}>Weight History</Text>
           <LineChart
@@ -95,15 +114,17 @@ const WeightScreen = () => {
             style={styles.chart}
           />
         </View>
+      ) : (
+        <Text>No logs for this month</Text>
       )}
 
       <FlatList
-        data={weightLogs.slice().reverse()}
+        data={filteredLogs.slice().reverse()}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.logItem}>
             <Text>Weight: {item.weight} kg</Text>
-            <Text>Date: {new Date(item.date).toLocaleDateString()}</Text>
+            <Text>Date: {dayjs(item.date).format('DD/MM/YYYY')}</Text>
           </View>
         )}
       />
@@ -129,6 +150,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 10,
     borderRadius: 5,
+  },
+  monthNavigation: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  monthLabel: {
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   chartContainer: {
     marginVertical: 20,

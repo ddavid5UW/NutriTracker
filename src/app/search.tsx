@@ -123,7 +123,7 @@ export default function SearchScreen() {
   }
 
   const items = data?.search?.hints || [];
-  console.log(data);
+  // console.log(data);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
