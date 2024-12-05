@@ -14,7 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLinkTo } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import RootLayout from "./_layout";
-import HomeScreen from ".";
+import HomeScreen from "./(drawer)";
 
 const LoginScreen: React.FC = () => {
   const [username, setUsername] = useState<string>("");
@@ -107,7 +107,7 @@ const LoginScreen: React.FC = () => {
 
   useEffect(() => {
     if (loggedIn) {
-      router.replace("/"); // Navigate to index screen when logged in
+      router.replace("/(drawer)"); // Navigate to index screen when logged in
     }
   }, [loggedIn]);
 

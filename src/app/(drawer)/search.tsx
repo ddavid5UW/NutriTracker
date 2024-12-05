@@ -10,7 +10,7 @@ import {
 import React, { useState } from "react";
 import { Link } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
-import FoodListItem from "../components/FoodListItem";
+import FoodListItem from "../../components/FoodListItem";
 import {
   GestureHandlerRootView,
   TextInput,

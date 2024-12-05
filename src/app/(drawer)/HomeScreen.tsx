@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { gql, useQuery } from "@apollo/client";
 import dayjs from "dayjs";
-import FoodLogListItem from "../components/FoodLogListItem";
+import FoodLogListItem from "../../components/FoodLogListItem";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
 import Stack from '@mui/material/Stack';
