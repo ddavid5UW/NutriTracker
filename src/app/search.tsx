@@ -134,8 +134,8 @@ export default function SearchScreen() {
           <Ionicons
             onPress={() => setScannerEnabled(false)}
             name="close"
-            size={40}
-            color="#624580"
+            size={60}
+            color="black"
             style={{ position: "absolute", right: 10, top: 10 }}
           />
         </CameraView>
