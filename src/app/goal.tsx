@@ -1,16 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert } from 'react-native';
+import React, { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
-import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 
 const GoalsPage: React.FC = () => {
   // State variables for goals
-  const [carbs, setCarbs] = useState<string>('');
-  const [cals, setCals] = useState<string>('');
-  const [protein, setProtein] = useState<string>('');
-  const [fat, setFat] = useState<string>('');
-  const [fiber, setFiber] = useState<string>('');
+  const [carbs, setCarbs] = useState<string>("");
+  const [cals, setCals] = useState<string>("");
+  const [protein, setProtein] = useState<string>("");
+  const [fat, setFat] = useState<string>("");
+  const [fiber, setFiber] = useState<string>("");
 
   const router = useRouter();
 
@@ -20,14 +27,14 @@ const GoalsPage: React.FC = () => {
         const savedGoals = await AsyncStorage.getItem("goals");
         if (savedGoals) {
           const goalsData = JSON.parse(savedGoals);
-          setCarbs(goalsData.carbs || '');
-          setCals(goalsData.cals || '');
-          setProtein(goalsData.protein || '');
-          setFat(goalsData.fat || '');
-          setFiber(goalsData.fiber || '');
+          setCarbs(goalsData.carbs || "");
+          setCals(goalsData.cals || "");
+          setProtein(goalsData.protein || "");
+          setFat(goalsData.fat || "");
+          setFiber(goalsData.fiber || "");
         }
       } catch (error) {
-        console.log('Error loading goals:', error);
+        console.log("Error loading goals:", error);
       }
     };
 
@@ -42,16 +49,15 @@ const GoalsPage: React.FC = () => {
           cals,
           protein,
           fat,
-          fiber
+          fiber,
         };
         await AsyncStorage.setItem("goals", JSON.stringify(goalsData));
         router.replace("/");
-
       } catch (error) {
-        console.error('Error saving goals data', error);
+        console.error("Error saving goals data", error);
       }
     } else {
-      Alert.alert('Invalid Input', 'Please fill in all goal fields.');
+      Alert.alert("Invalid Input", "Please fill in all goal fields.");
     }
   };
 
@@ -62,7 +68,9 @@ const GoalsPage: React.FC = () => {
       </View>
 
       <View style={styles.formGroup}>
-        <Text>Carbohydrates (g):</Text>
+        <Text style={{ color: "white", paddingLeft: 5, paddingBottom: 3 }}>
+          Carbohydrates (g):
+        </Text>
         <TextInput
           style={styles.input}
           value={carbs}
@@ -73,7 +81,9 @@ const GoalsPage: React.FC = () => {
       </View>
 
       <View style={styles.formGroup}>
-        <Text>Calories (kcal):</Text>
+        <Text style={{ color: "white", paddingLeft: 5, paddingBottom: 3 }}>
+          Calories (kcal):
+        </Text>
         <TextInput
           style={styles.input}
           value={cals}
@@ -84,7 +94,9 @@ const GoalsPage: React.FC = () => {
       </View>
 
       <View style={styles.formGroup}>
-        <Text>Protein (g):</Text>
+        <Text style={{ color: "white", paddingLeft: 5, paddingBottom: 3 }}>
+          Protein (g):
+        </Text>
         <TextInput
           style={styles.input}
           value={protein}
@@ -95,7 +107,9 @@ const GoalsPage: React.FC = () => {
       </View>
 
       <View style={styles.formGroup}>
-        <Text>Fat (g):</Text>
+        <Text style={{ color: "white", paddingLeft: 5, paddingBottom: 3 }}>
+          Fat (g):
+        </Text>
         <TextInput
           style={styles.input}
           value={fat}
@@ -106,7 +120,9 @@ const GoalsPage: React.FC = () => {
       </View>
 
       <View style={styles.formGroup}>
-        <Text>Fiber (g):</Text>
+        <Text style={{ color: "white", paddingLeft: 5, paddingBottom: 3 }}>
+          Fiber (g):
+        </Text>
         <TextInput
           style={styles.input}
           value={fiber}
@@ -117,7 +133,9 @@ const GoalsPage: React.FC = () => {
       </View>
 
       <View style={styles.buttonRow}>
-        <Button title="Save Goals" onPress={handleSubmit} />
+        <TouchableOpacity style={styles.searchButton} onPress={handleSubmit}>
+          <Text style={styles.searchButtonText}>Save Goals</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -127,29 +145,44 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     flex: 1,
+    backgroundColor: "#22272b",
   },
   headerRow: {
     marginBottom: 20,
   },
   subtitle: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
+    color: "white",
   },
   formGroup: {
     marginBottom: 15,
   },
   label: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
+    color: "white",
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 4,
+    borderWidth: 2,
+    borderColor: "#ccc",
+    borderRadius: 15,
     padding: 10,
+    backgroundColor: "white",
   },
   buttonRow: {
     marginTop: 20,
+    alignItems: "center",
+  },
+  searchButton: {
+    backgroundColor: '#9856db',
+    padding: 10,
+    borderRadius: 5,
     alignItems: 'center',
+  },
+  searchButtonText: {
+    color: '#ffffff',
+    fontWeight: "bold",
+    fontSize: 18,
   },
 });
 

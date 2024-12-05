@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert } from 'react-native';
+import { Alert, TouchableOpacity } from 'react-native';
 import {useRouter } from "expo-router";
 import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
 
@@ -78,7 +78,7 @@ const SettingsPage: React.FC = () => {
       </View>
       
       <View style={styles.formGroup}>
-        <Text>New Username:</Text>
+        <Text style={styles.label}>New Username:</Text>
         <TextInput
           style={styles.input}
           value={username}
@@ -88,7 +88,7 @@ const SettingsPage: React.FC = () => {
       </View>
 
       <View style={styles.formGroup}>
-        <Text>New Password:</Text>
+        <Text style={styles.label}>New Password:</Text>
         <TextInput
           style={styles.input}
           value={password}
@@ -98,19 +98,21 @@ const SettingsPage: React.FC = () => {
         />
       </View>
 
-      <View style={styles.formGroup}>
-        <Text>Set Goal:</Text>
+      {/* <View style={styles.formGroup}>
+        <Text style={styles.label}>Set Goal:</Text>
         <TextInput
           style={styles.input}
           value={goal}
           placeholder={goal}
           onChangeText={setGoal}
         />
-      </View>
+      </View> */}
 
 
       <View style={styles.buttonRow}>
-        <Button title="Save Changes" onPress={handleSubmit} />
+        <TouchableOpacity style={styles.searchButton} onPress={handleSubmit}>
+          <Text style={styles.searchButtonText}>Save Changes</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -120,6 +122,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     flex: 1,
+    backgroundColor: "#22272b"
   },
   headerRow: {
     marginBottom: 20,
@@ -127,12 +130,14 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 24,
     fontWeight: 'bold',
+    color:"white"
   },
   formGroup: {
     marginBottom: 15,
   },
   label: {
-    fontWeight: 'bold',
+    color: "white",
+    paddingLeft:3
   },
   currentUsername: {
     fontSize: 18,
@@ -142,8 +147,9 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 4,
+    borderRadius: 15,
     padding: 10,
+    backgroundColor: "white"
   },
   textArea: {
     borderWidth: 1,
@@ -161,6 +167,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 15,
+  },
+  searchButton: {
+    backgroundColor: '#9856db',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  searchButtonText: {
+    color: '#ffffff',
+    fontWeight: "bold",
+    fontSize: 18,
   },
 });
 

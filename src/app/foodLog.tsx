@@ -73,7 +73,7 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <View style={styles.headerRow}>
         <TouchableOpacity onPress={goToPreviousDay}>
-          <AntDesign name="left" size={24} color="black" />
+          <AntDesign name="left" size={24} color="white" />
         </TouchableOpacity>
         <Text style={styles.dateText}>{dayjs(date).format("MMMM DD, YYYY")}</Text>
         <TouchableOpacity 
@@ -83,7 +83,7 @@ export default function HomeScreen() {
           <AntDesign 
             name="right" 
             size={24} 
-            color={isToday ? "gray" : "black"} 
+            color={isToday ? "gray" : "white"} 
           />
         </TouchableOpacity>
       </View>
@@ -106,7 +106,7 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
+    backgroundColor: "#22272b",
     flex: 1,
     padding: 10,
     gap: 10,
@@ -120,12 +120,12 @@ const styles = StyleSheet.create({
   dateText: {
     fontSize: 18,
     fontWeight: "500",
-    color: "dimgray",
+    color: "white",
   },
   caloriesText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "black",
+    color: "white",
     marginVertical: 10,
     textAlign: "center",
   },

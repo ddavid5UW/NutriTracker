@@ -103,10 +103,31 @@ export default function SearchScreen() {
         >
           <View style={styles.buttonContainer}>
             <TouchableOpacity
-              style={styles.button}
+              style={{
+                flex: 1,
+                alignSelf: "flex-end",
+                alignItems: "center",
+              }}
               onPress={toggleCameraFacing}
             >
-              <Text style={styles.text}>Flip Camera</Text>
+              <Text
+                style={{
+                  fontSize: 24,
+                  fontWeight: "bold",
+                  color: "white",
+                  backgroundColor: "#22272b",
+                  borderColor: "dimgrey",
+                  borderRadius: 15,
+                  borderWidth: 1,
+                  paddingLeft:10,
+                  paddingRight:10,
+                  paddingBottom: 5,
+                  paddingTop: 5,
+
+                }}
+              >
+                Flip Camera
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -114,7 +135,7 @@ export default function SearchScreen() {
             onPress={() => setScannerEnabled(false)}
             name="close"
             size={40}
-            color="dimgray"
+            color="#624580"
             style={{ position: "absolute", right: 10, top: 10 }}
           />
         </CameraView>
@@ -139,17 +160,21 @@ export default function SearchScreen() {
             onPress={() => setScannerEnabled(true)}
             name="barcode-outline"
             size={32}
-            color="dimgray"
+            color="#9856db"
           />
         </View>
-        {search && <Button title="Search" onPress={performSearch} />}
+        {search && (
+          <TouchableOpacity style={styles.searchButton} onPress={performSearch}>
+            <Text style={styles.searchButtonText}>Search</Text>
+          </TouchableOpacity>
+        )}
         {loading && <ActivityIndicator />}
         <FlatList
           style={{ paddingRight: 10 }}
           data={items}
           renderItem={({ item }) => <FoodListItem item={item} />}
           keyExtractor={(item) => item.label}
-          ListEmptyComponent={() => <Text>Search a food</Text>}
+          ListEmptyComponent={() => <Text></Text>}
           contentContainerStyle={{ gap: 10 }}
         />
       </View>
@@ -160,12 +185,12 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#22272b",
     padding: 10,
     gap: 10,
   },
   input: {
-    backgroundColor: "dimgray",
+    backgroundColor: "white",
     padding: 10,
     borderRadius: 20,
     flex: 1,
@@ -183,6 +208,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: "flex-end",
     alignItems: "center",
+    color: "white",
+    backgroundColor: "white",
   },
   text: {
     fontSize: 24,
@@ -192,5 +219,16 @@ const styles = StyleSheet.create({
   message: {
     textAlign: "center",
     paddingBottom: 10,
+  },
+  searchButton: {
+    backgroundColor: "#9856db",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  searchButtonText: {
+    color: "#ffffff",
+    fontWeight: "bold",
+    fontSize: 18,
   },
 });

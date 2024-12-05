@@ -189,7 +189,7 @@ export default function HomeScreen() {
       </View>
       <FlatList
         data={foodLogs}
-        contentContainerStyle={{ gap: 5 }}
+        contentContainerStyle={{ gap: 10 }}
         renderItem={({ item }) => <FoodLogListItem item={item} />}
         keyExtractor={(item) => item.id.toString()}
       />
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#22272b',
   },
   headerRow: {
     flexDirection: 'row',
@@ -210,13 +210,15 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
+    color: "#fcfbf8",
+
   },
   welcomeText: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "black",
+    color: "#fcfbf8",
     marginBottom: 10,
   },
   gaugeContainer: {

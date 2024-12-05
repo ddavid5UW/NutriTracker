@@ -85,10 +85,10 @@ const FoodListItem = ({ item }) => {
   return (
     <View style={styles.container}>
       <View style={{ flex: 1, gap: 5 }}>
-        <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+        <Text style={{ fontWeight: "bold", fontSize: 16, color: "#fcfbf8" }}>
           {item.food.label}
         </Text>
-        <Text style={{ color: "dimgray" }}>
+        <Text style={{ color: "#fcfbf8" }}>
           {parseInt(item.food.nutrients.CHOCDF)}g carb,{" "}
           {parseInt(item.food.nutrients.ENERC_KCAL)} cal,{" "}
           {parseInt(item.food.nutrients.FAT)}g fat,{" "}
@@ -106,7 +106,7 @@ const FoodListItem = ({ item }) => {
       <AntDesign
         name="pluscircleo"
         size={24}
-        color="royalblue"
+        color="white"
         onPress={onPlusPressed}
       />
     </View>
@@ -115,7 +115,7 @@ const FoodListItem = ({ item }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#f6f6f8",
+    backgroundColor: "#4c4c54",
     padding: 10,
     borderRadius: 5,
     flexDirection: "row",
