@@ -4,7 +4,7 @@ import { View, Text, TextInput, Button, StyleSheet, Alert, Linking } from 'react
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLinkTo } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
-import RootLayout from './_layout';
+import RootLayout from '../_layout';
 import HomeScreen from '.';
 
 const LogoutScreen: React.FC = () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import HomeScreen from './HomeScreen';
-import LoginScreen from './login';
+import LoginScreen from '../login';
 import SearchScreen from './search';
 import WeightScreen from './weight';
 import FoodLogScreen from './foodLog';

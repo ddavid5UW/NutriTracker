@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { gql, useQuery } from "@apollo/client";
 import dayjs from "dayjs";
-import FoodLogListItem from "../components/FoodLogListItem";
+import FoodLogListItem from "../../components/FoodLogListItem";
 import { useState } from "react";
 import { AntDesign } from '@expo/vector-icons';
 
