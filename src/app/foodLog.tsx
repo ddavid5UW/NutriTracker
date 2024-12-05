@@ -57,6 +57,10 @@ export default function HomeScreen() {
 
   // Calculate total calories
   const totalCalories = data?.foodLogsForDate?.reduce((sum: any, log: { kcal: any; }) => sum + log.kcal, 0) || 0;
+  const totalCarbs = data?.foodLogsForDate?.reduce((sum: any, log: { carb: any; }) => sum + log.carb, 0) || 0;
+  const totalFat = data?.foodLogsForDate?.reduce((sum: any, log: { fat: any; }) => sum + log.fat, 0) || 0;
+  const totalFiber = data?.foodLogsForDate?.reduce((sum: any, log: { fiber: any; }) => sum + log.fiber, 0) || 0;
+  const totalProtein = data?.foodLogsForDate?.reduce((sum: any, log: { protien: any; }) => sum + log.protien, 0) || 0;
 
   return (
     // <View style={styles.container}>
@@ -89,6 +93,12 @@ export default function HomeScreen() {
       </View>
 
       <Text style={styles.caloriesText}>Total Calories: {totalCalories} kcal</Text>
+      <Text style={styles.caloriesText}>Total Carbs: {totalCarbs} g</Text>
+      <Text style={styles.caloriesText}>Total Fat: {totalFat} g</Text>
+      <Text style={styles.caloriesText}>Total Fiber: {totalFiber} g</Text>
+      <Text style={styles.caloriesText}>Total Protein: {totalProtein} g</Text>
+
+
       
       {loading && <ActivityIndicator size="large" color="gray" />}
       {error && <Text>Error loading data.</Text>}
@@ -126,7 +136,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "white",
-    marginVertical: 10,
     textAlign: "center",
   },
 });
