@@ -81,16 +81,18 @@ const WeightScreen = () => {
           placeholder="Enter weight (kg)"
           keyboardType="numeric"
         />
-        <Button title="Add Weight" onPress={handleAddWeight} />
+        <TouchableOpacity style={styles.searchButton} onPress={handleAddWeight}>
+          <Text style={styles.searchButtonText}>Save Goals</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.monthNavigation}>
         <TouchableOpacity onPress={() => handleMonthChange('prev')}>
-          <AntDesign name="left" size={24} color="black" />
+          <AntDesign name="left" size={24} color="white" />
         </TouchableOpacity>
         <Text style={styles.monthLabel}>{currentMonth.format('MMMM YYYY')}</Text>
         <TouchableOpacity onPress={() => handleMonthChange('next')}>
-          <AntDesign name="right" size={24} color="black" />
+          <AntDesign name="right" size={24} color="white" />
         </TouchableOpacity>
       </View>
 
@@ -102,20 +104,24 @@ const WeightScreen = () => {
             width={Dimensions.get('window').width - 40}
             height={220}
             chartConfig={{
-              backgroundColor: '#ffffff',
-              backgroundGradientFrom: '#ffffff',
-              backgroundGradientTo: '#ffffff',
+              backgroundColor: '#22272b',
+              backgroundGradientFrom: '#22272b',
+              backgroundGradientTo: '#22272b',
               decimalPlaces: 1,
-              color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`,
+              // color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`,
+              color: (opacity = 1) => "#9856db",
               style: {
                 borderRadius: 16,
+              },
+              propsForBackgroundLines: {
+                strokeWidth: 0, // Removes grid lines
               },
             }}
             style={styles.chart}
           />
         </View>
       ) : (
-        <Text>No logs for this month</Text>
+        <View style = {{ alignItems: 'center',justifyContent: 'space-between',}}><Text style={{color: "white",}}>No logs for this month</Text></View>
       )}
 
       <FlatList
@@ -123,8 +129,8 @@ const WeightScreen = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.logItem}>
-            <Text>Weight: {item.weight} kg</Text>
-            <Text>Date: {dayjs(item.date).format('DD/MM/YYYY')}</Text>
+            <Text style={{color: "white"}}>Weight: {item.weight} kg</Text>
+            <Text style={{color: "white"}}>Date: {dayjs(item.date).format('DD/MM/YYYY')}</Text>
           </View>
         )}
       />
@@ -136,7 +142,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#22272b',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -146,7 +152,8 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: 40,
-    borderColor: '#ccc',
+    borderColor: 'white',
+    backgroundColor: "white",
     borderWidth: 1,
     paddingHorizontal: 10,
     borderRadius: 5,
@@ -160,6 +167,7 @@ const styles = StyleSheet.create({
   monthLabel: {
     fontSize: 16,
     fontWeight: 'bold',
+    color:"white"
   },
   chartContainer: {
     marginVertical: 20,
@@ -169,6 +177,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
+    color:"white"
   },
   chart: {
     marginVertical: 8,
@@ -177,7 +186,21 @@ const styles = StyleSheet.create({
   logItem: {
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    borderBottomColor: 'white',
+    // borderColor: "white",
+    // borderRadius: 15,
+    // borderWidth: 1
+  },
+  searchButton: {
+    backgroundColor: '#9856db',
+    padding: 5,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  searchButtonText: {
+    color: '#ffffff',
+    fontWeight: "bold",
+    fontSize: 18,
   },
 });
 

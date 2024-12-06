@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { gql, useQuery } from "@apollo/client";
 import dayjs from "dayjs";
-import FoodLogListItem from "../components/FoodLogListItem";
+import FoodLogListItem from "../../components/FoodLogListItem";
 import { useState } from "react";
 import { AntDesign } from '@expo/vector-icons';
 
@@ -57,6 +57,10 @@ export default function HomeScreen() {
 
   // Calculate total calories
   const totalCalories = data?.foodLogsForDate?.reduce((sum: any, log: { kcal: any; }) => sum + log.kcal, 0) || 0;
+  const totalCarbs = data?.foodLogsForDate?.reduce((sum: any, log: { carb: any; }) => sum + log.carb, 0) || 0;
+  const totalFat = data?.foodLogsForDate?.reduce((sum: any, log: { fat: any; }) => sum + log.fat, 0) || 0;
+  const totalFiber = data?.foodLogsForDate?.reduce((sum: any, log: { fiber: any; }) => sum + log.fiber, 0) || 0;
+  const totalProtein = data?.foodLogsForDate?.reduce((sum: any, log: { protien: any; }) => sum + log.protien, 0) || 0;
 
   return (
     // <View style={styles.container}>
@@ -73,7 +77,7 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <View style={styles.headerRow}>
         <TouchableOpacity onPress={goToPreviousDay}>
-          <AntDesign name="left" size={24} color="black" />
+          <AntDesign name="left" size={24} color="white" />
         </TouchableOpacity>
         <Text style={styles.dateText}>{dayjs(date).format("MMMM DD, YYYY")}</Text>
         <TouchableOpacity 
@@ -83,12 +87,18 @@ export default function HomeScreen() {
           <AntDesign 
             name="right" 
             size={24} 
-            color={isToday ? "gray" : "black"} 
+            color={isToday ? "gray" : "white"} 
           />
         </TouchableOpacity>
       </View>
 
       <Text style={styles.caloriesText}>Total Calories: {totalCalories} kcal</Text>
+      <Text style={styles.caloriesText}>Total Carbs: {totalCarbs} g</Text>
+      <Text style={styles.caloriesText}>Total Fat: {totalFat} g</Text>
+      <Text style={styles.caloriesText}>Total Fiber: {totalFiber} g</Text>
+      <Text style={styles.caloriesText}>Total Protein: {totalProtein} g</Text>
+
+
       
       {loading && <ActivityIndicator size="large" color="gray" />}
       {error && <Text>Error loading data.</Text>}
@@ -106,7 +116,7 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
+    backgroundColor: "#22272b",
     flex: 1,
     padding: 10,
     gap: 10,
@@ -120,13 +130,12 @@ const styles = StyleSheet.create({
   dateText: {
     fontSize: 18,
     fontWeight: "500",
-    color: "dimgray",
+    color: "white",
   },
   caloriesText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "black",
-    marginVertical: 10,
+    color: "white",
     textAlign: "center",
   },
 });

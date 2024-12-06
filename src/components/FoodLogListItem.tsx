@@ -7,8 +7,8 @@ const FoodLogListItem = ({ item }) => {
   return (
     <View style={styles.container}>
       <View style={{ flex: 1, gap: 5 }}>
-        <Text style={{ fontWeight: "bold", fontSize: 16 }}>{item.label}</Text>
-        <Text style={{ color: "dimgray" }}>{item.carb}g carb, {item.kcal} cal, {item.fat}g fat, {item.fiber}g fiber, {item.protien}g protein</Text>
+        <Text style={{ fontWeight: "bold", fontSize: 16, color:"#fcfbf8" }}>{item.label}</Text>
+        <Text style={{ color:"#fcfbf8" }}>{item.carb}g carb, {item.kcal} cal, {item.fat}g fat, {item.fiber}g fiber, {item.protien}g protein</Text>
       </View>
       {item.image && (
         <Image
@@ -23,9 +23,9 @@ const FoodLogListItem = ({ item }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#f6f6f8",
+    backgroundColor: "#4c4c54",
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 20,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
