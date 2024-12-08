@@ -13,10 +13,7 @@ import { gql, useQuery } from "@apollo/client";
 import dayjs from "dayjs";
 import FoodLogListItem from "../../components/FoodLogListItem";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import { Box } from '@mui/material';
+import { CircularProgressBase } from 'react-native-circular-progress-indicator';
 
 // Query to fetch food logs for a specific date
 const foodLogsQuery = gql`
@@ -40,9 +37,8 @@ const foodLogsQuery = gql`
 export default function HomeScreen() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
-  const [username, setUsername] = useState<string | null>(null); // State for username
+  const [username, setUsername] = useState<string | null>(null);
   const router = useRouter();
-  const [goal, setGoal] = useState<string>('');
   const user_id = "Eric zhang";
   const date = dayjs().format("YYYY-MM-DD");
   const [carbGoal, setCarbGoal] = useState<string>('');
@@ -127,53 +123,103 @@ export default function HomeScreen() {
   const totalFat = foodLogs.reduce((sum, log) => sum + (log.fat || 0), 0);
   const totalFiber = foodLogs.reduce((sum, log) => sum + (log.fiber || 0), 0);
   const totalProtein = foodLogs.reduce((sum, log) => sum + (log.protien || 0), 0);
-  const intGoal = parseInt(goal,10)
-  const calDisp = totalCalories
 
+  // Calculate progress percentage
+  const calcProgress = (actual: number, goal: string) => {
+    const goalValue = parseFloat(goal);
+    const progress = goalValue > 0 ? (actual / goalValue) * 100 : 0;
+    return parseFloat(Math.min(progress, 100).toFixed(2));
+  };
   
+  const progressCalories = calcProgress(totalCalories, calGoal);
+  const progressCarbs = calcProgress(totalCarbs, carbGoal);
+  const progressProtein = calcProgress(totalProtein, proteinGoal);
+  const progressFat = calcProgress(totalFat, fatGoal);
+  const progressFiber = calcProgress(totalFiber, fiberGoal);
 
+  const props = {
+    activeStrokeWidth: 25,
+    inActiveStrokeWidth: 25,
+    inActiveStrokeOpacity: 0.2,
+  };
 
   return (
     <View style={styles.container}>
-        <Text style={styles.welcomeText}>{`Welcome, ${username}`}</Text>
-        {/*<View style={styles.headerRow}>
-        <Text style={styles.subtitle}>Total Calories</Text>
-        <Text style={{ fontSize: 18 }}>{`${totalCalories} kcal`}</Text>
+      <Text style={styles.welcomeText}>{`Welcome, ${username}`}</Text>
+
+      <View style={styles.mainContent}>
+        <View style={styles.gaugeContainer}>
+          {/* Calories Progress */}
+          <CircularProgressBase
+            {...props}
+            value={progressCalories}
+            radius={150}
+            activeStrokeColor="#e84118"
+            inActiveStrokeColor="#e84118"
+          >
+            {/* Carbs Progress */}
+            <CircularProgressBase
+              {...props}
+              value={progressCarbs}
+              radius={125}
+              activeStrokeColor="#badc58"
+              inActiveStrokeColor="#badc58"
+            >
+              {/* Protein Progress */}
+              <CircularProgressBase
+                {...props}
+                value={progressProtein}
+                radius={100}
+                activeStrokeColor="#18dcff"
+                inActiveStrokeColor="#18dcff"
+              >
+                {/* Fat Progress */}
+                <CircularProgressBase
+                  {...props}
+                  value={progressFat}
+                  radius={75}
+                  activeStrokeColor="#feca57"
+                  inActiveStrokeColor="#feca57"
+                >
+                  {/* Fiber Progress */}
+                  <CircularProgressBase
+                    {...props}
+                    value={progressFiber}
+                    radius={50}
+                    activeStrokeColor="#a29bfe"
+                    inActiveStrokeColor="#a29bfe"
+                  />
+                </CircularProgressBase>
+              </CircularProgressBase>
+            </CircularProgressBase>
+          </CircularProgressBase>
+        </View>
+
+        {/* Legend Section */}
+        <View style={styles.legendContainer}>
+          <View style={styles.legendItem}>
+            <View style={[styles.legendColor, { backgroundColor: "#e84118" }]} />
+            <Text style={styles.legendText}>Calories: {progressCalories}%</Text>
+          </View>
+          <View style={styles.legendItem}>
+            <View style={[styles.legendColor, { backgroundColor: "#badc58" }]} />
+            <Text style={styles.legendText}>Carbs: {progressCarbs}%</Text>
+          </View>
+          <View style={styles.legendItem}>
+            <View style={[styles.legendColor, { backgroundColor: "#18dcff" }]} />
+            <Text style={styles.legendText}>Protein: {progressProtein}%</Text>
+          </View>
+          <View style={styles.legendItem}>
+            <View style={[styles.legendColor, { backgroundColor: "#feca57" }]} />
+            <Text style={styles.legendText}>Fat: {progressFat}%</Text>
+          </View>
+          <View style={styles.legendItem}>
+            <View style={[styles.legendColor, { backgroundColor: "#a29bfe" }]} />
+            <Text style={styles.legendText}>Fiber: {progressFiber}%</Text>
+          </View>
+        </View>
       </View>
-      <View style={styles.headerRow}>
-        <Text style={styles.subtitle}>Total Carbs</Text>
-        <Text style={{ fontSize: 18 }}>{`${totalCarbs} carbs`}</Text>
-      </View>
-      <View style={styles.headerRow}>
-        <Text style={styles.subtitle}>Total Fat</Text>
-        <Text style={{ fontSize: 18 }}>{`${totalFat} Fat`}</Text>
-      </View>
-      <View style={styles.headerRow}>
-        <Text style={styles.subtitle}>Total Fiber</Text>
-        <Text style={{ fontSize: 18 }}>{`${totalFiber} fiber`}</Text>
-      </View>
-      <View style={styles.headerRow}>
-        <Text style={styles.subtitle}>Total Protein</Text>
-        <Text style={{ fontSize: 18 }}>{`${totalProtein} protein`}</Text>
-      </View>*/}
-      <center>
-      <View style={styles.gaugeContainer}>
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 1, md: 2 }}>
-        <MultiRingGauge
-          calories={totalCalories}
-          carbs={totalCarbs}
-          fats={totalFat}
-          fibers={totalFiber}
-          protein={totalProtein}
-          carbsGoal={parseInt(carbGoal,10) ? parseInt(carbGoal,10) : 0}
-          calsGoal = {parseInt(calGoal,10) ? parseInt(calGoal,10) : 0}
-          fatsGoal = {parseInt(fatGoal,10) ? parseInt(fatGoal,10) : 0}
-          fibersGoal = {parseInt(fiberGoal,10) ? parseInt(fiberGoal,10) : 0}
-          proteinsGoal = {parseInt(proteinGoal,10) ? parseInt(proteinGoal,10) : 0}
-        />
-        </Stack>
-      </View>
-      </center>
+
       <View style={styles.headerRow}>
         <Text style={styles.subtitle}>Today's Log</Text>
         {/* <Link href={"/search"} asChild>
@@ -203,6 +249,36 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#22272b',
   },
+  mainContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  gaugeContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  legendContainer: {
+    marginLeft: 20,
+  },
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  legendColor: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    marginRight: 10,
+  },
+  legendText: {
+    color: "#fcfbf8",
+    fontSize: 16,
+  },
   headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -213,7 +289,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: "#fcfbf8",
-
   },
   welcomeText: {
     fontSize: 24,
@@ -221,231 +296,5 @@ const styles = StyleSheet.create({
     color: "#fcfbf8",
     marginBottom: 10,
   },
-  gaugeContainer: {
-    flex: 1, // Take full height and width available
-    justifyContent: 'center', // Center content vertically
-    alignItems: 'center', // Center content horizontally
-    marginBottom: 20, // Adjust margin if needed
-  },
-}); 
-interface MultiRingGaugeProps {
-  calories: number;
-  carbs: number;
-  fats: number;
-  fibers: number;
-  protein: number;
-  carbsGoal : number
-  calsGoal : number
-  fatsGoal : number
-  fibersGoal : number
-  proteinsGoal : number
+});
 
-}
-
-const MultiRingGauge: React.FC<MultiRingGaugeProps> = ({
-  calories,
-  carbs,
-  fats,
-  fibers,
-  protein,
-  carbsGoal,
-  calsGoal,
-  fatsGoal,
-  fibersGoal,
-  proteinsGoal,
-}) => {
-  return (
-    <Stack direction="row" spacing={4} alignItems="center" justifyContent="center">
-      {/* Gauge with 5 Rings */}
-      <div style={{ position: 'relative', width: 300, height: 300 }}>
-        {/* Outer Gauge Ring - Calories */}
-        <Gauge
-          width={300}
-          height={300}
-          value={calories}
-          valueMax={calsGoal}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            zIndex: 1,
-          }}
-          sx={(theme) => ({
-            [`& .${gaugeClasses.valueText}`]: {
-              fontSize: 0,
-            },
-            [`& .${gaugeClasses.valueArc}`]: {
-              fill: '#52b202',
-            },
-            [`& .${gaugeClasses.referenceArc}`]: {
-              fill: theme.palette.text.disabled,
-            },
-          })}
-        />
-        {/* 2nd Ring - Carbs */}
-        <Gauge
-          width={250}
-          height={250}
-          value={carbs}
-          valueMax={carbsGoal}
-          style={{
-            position: 'absolute',
-            top: 25,
-            left: 25,
-            zIndex: 2,
-          }}
-          sx={(theme) => ({
-            [`& .${gaugeClasses.valueText}`]: {
-              fontSize: 0,
-            },
-            [`& .${gaugeClasses.valueArc}`]: {
-              fill: '#e54020',
-            },
-            [`& .${gaugeClasses.referenceArc}`]: {
-              fill: theme.palette.text.disabled,
-            },
-          })}
-        />
-        {/* 3rd Ring - Fats */}
-        <Gauge
-          width={200}
-          height={200}
-          value={fats}
-          valueMax={fatsGoal}
-          style={{
-            position: 'absolute',
-            top: 50,
-            left: 50,
-            zIndex: 3,
-          }}
-          sx={(theme) => ({
-            [`& .${gaugeClasses.valueText}`]: {
-              fontSize: 0,
-            },
-            [`& .${gaugeClasses.valueArc}`]: {
-              fill: '#6620e5',
-            },
-            [`& .${gaugeClasses.referenceArc}`]: {
-              fill: theme.palette.text.disabled,
-            },
-          })}
-        />
-        {/* 4th Ring - Fibers */}
-        <Gauge
-          width={150}
-          height={150}
-          value={fibers}
-          valueMax={fibersGoal}
-          style={{
-            position: 'absolute',
-            top: 75,
-            left: 75,
-            zIndex: 4,
-          }}
-          sx={(theme) => ({
-            [`& .${gaugeClasses.valueText}`]: {
-              fontSize: 0,
-            },
-            [`& .${gaugeClasses.valueArc}`]: {
-              fill: '#e5ab20',
-            },
-            [`& .${gaugeClasses.referenceArc}`]: {
-              fill: theme.palette.text.disabled,
-            },
-          })}
-        />
-        {/* 5th Ring - Protein */}
-        <Gauge
-          width={100}
-          height={100}
-          value={protein}
-          valueMax={proteinsGoal}
-          style={{
-            position: 'absolute',
-            top: 100,
-            left: 100,
-            zIndex: 5,
-          }}
-          sx={(theme) => ({
-            [`& .${gaugeClasses.valueText}`]: {
-              fontSize: 0,
-            },
-            [`& .${gaugeClasses.valueArc}`]: {
-              fill: '#20e5db',
-            },
-            [`& .${gaugeClasses.referenceArc}`]: {
-              fill: theme.palette.text.disabled,
-            },
-          })}
-          
-        />
-      </div>
-
-      {/* Legend */}
-      <Box>
-        <Stack direction="column" spacing={1}>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Box
-              sx={{
-                width: 20,
-                height: 20,
-                backgroundColor: '#52b202',
-              }}
-            />
-            <Typography variant="body1" component="div">
-              Calories ({calories}kcal) / {calsGoal}
-            </Typography>
-          </Stack>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Box
-              sx={{
-                width: 20,
-                height: 20,
-                backgroundColor: '#e54020',
-              }}
-            />
-            <Typography variant="body1" component="div">
-              Carbs ({carbs}g) / {carbsGoal}
-            </Typography>
-          </Stack>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Box
-              sx={{
-                width: 20,
-                height: 20,
-                backgroundColor: '#6620e5',
-              }}
-            />
-            <Typography variant="body1" component="div">
-              Fats ({fats}g) / {fatsGoal}
-            </Typography>
-          </Stack>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Box
-              sx={{
-                width: 20,
-                height: 20,
-                backgroundColor: '#e5ab20',
-              }}
-            />
-            <Typography variant="body1" component="div">
-              Fibers ({fibers}g) / {fibersGoal}
-            </Typography>
-          </Stack>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Box
-              sx={{
-                width: 20,
-                height: 20,
-                backgroundColor: '#20e5db',
-              }}
-            />
-            <Typography variant="body1" component="div">
-              Protein ({protein}g) / {proteinsGoal}
-            </Typography>
-          </Stack>
-        </Stack>
-      </Box>
-    </Stack>
-  );
-};
