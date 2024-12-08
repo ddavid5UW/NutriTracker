@@ -1,50 +1,73 @@
-# Welcome to your Expo app 👋
+# **NutriTracker**
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**Track Your Nutrition, One Scan at a Time!**  
+NutriTracker is a powerful tool for tracking macronutrients like **protein**, **carbs**, **fats**, **fiber**, and **calorie counts**. With its intuitive **barcode scanning** feature, you can quickly obtain nutritional details for food items, making it easier than ever to stay on top of your dietary goals.
 
-## Get started
+---
 
-1. Install dependencies
+## **Table of Contents**
+1. [Features](#features)
+2. [Contributions](#contributions)
+3. [Usage](#usage)
+4. [Known Issues & Future Improvements](#known-issues--future-improvements)
 
-   ```bash
-   npm install
-   ```
 
-2. Start the app
+---
 
-   ```bash
-    npx expo start
-   ```
+## **Features**
+- 📊 **Macronutrient Tracking**: Log daily consumption of **protein, carbs, fats, fiber, and calorie counts**.
+- 📷 **Barcode Scanning**: Quickly scan food item barcodes to automatically retrieve their nutritional information.
+- 🍽️ **Meal Logging**: Add meals and snacks with customized entries.
+- 📅 **Daily Summaries**: View a detailed breakdown of your daily macronutrient intake.
+- 🎯 **Goal Setting**: Set personal nutrition goals and track progress toward them.
 
-In the output, you'll find options to open the app in a
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## **Contributions**
 
-## Get a fresh project
+The development of **NutriTracker** involved the following contributors and their respective areas of focus:
 
-When you're ready, run:
+| **Contributor**      | **Contributor Github**      | **Contributions**                                               |
+|---------------------|------------------------------|------------------------------------|
+| **Eric Zhang**      | ericzhang02 | Barcode Scanner Integration, Food Database Connections |
+| **Anish Singh**  | raggedpuppet915 | Weight Logging, Drawer Navigation System |
+| **Calvin Neprud**  | cneprud | User Authentication      |
+| **Daniel Alexander David**  | ddavid5UW | Data Visualization, Settings|            
 
-```bash
-npm run reset-project
-```
+---
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## **Usage**
 
-## Learn more
+To get a better understanding of how **NutriTracker** works, check out this demo video:  
+🎥 [**NutriTracker Demo Video**](insert-link-here)  
 
-To learn more about developing your project with Expo, look at the following resources:
+### **Core Functionalities**
+- **Barcode Scanning**: Scan the barcode of any food item to instantly retrieve its nutritional details, including protein, carbs, fats, fiber, and calorie counts. 
+- **Meal Logging**: Log your daily meals and snacks for a comprehensive view of your nutrition. 
+- **Nutritional Breakdown**: View a visual and textual summary of your macronutrient intake.
+- **Goal Setting**: Set personal nutrition goals and track your progress as you log your meals.
+- **Daily Summaries**: See your progress throughout the day with updates on your macronutrient targets.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+---
 
-## Join the community
+## **Known Issues & Future Improvements**
 
-Join our community of developers creating universal apps.
+### **Known Issues**
+- ⚠️ **Outdated Expo Go SDK**: The app currently relies on an outdated **Expo Go SDK**. Updating to the latest SDK requires multiple code changes due to differences in how the new SDK handles certain functionalities. This is a high-priority technical debt item that will be addressed in future development cycles. 
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+---
+
+### **Future Improvements**
+- 📚 **Food Database Expansion**: Increase the variety of supported food items, including international foods. 
+- ✍️ **Custom Food Entry**: Allow users to add custom food entries that aren't found in the barcode database. 
+- 📡 **Offline Mode**: Enable offline support so users can track meals without an internet connection. 
+- 🌐 **Multi-Language Support**: Add support for multiple languages in the user interface for a more inclusive experience. 
+- 📈 **Enhanced Progress Tracking**: Introduce advanced insights, such as weekly trends and goal tracking over time. 
+
+---
+
+
+
+
+
